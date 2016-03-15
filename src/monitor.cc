@@ -23,6 +23,9 @@
 
 #include <iostream>
 
+#include <logging.hh>
+#include <service.hh>
+
 using namespace std;
 
 
@@ -40,8 +43,16 @@ usage(bool err, const char *argv0)
 int
 main(int argc, const char *argv[])
 {
+	auto console = logger::get_logger("monitor");
 	if (2 != argc) {
 		usage(true, argv[0]);
 	}
 
+	smsvc::Service	svc;
+	if (-1 == smsvc::load_service(argv[1], svc)) {
+		// logger::console->error("[monitor] failed to load service");
+		exit(1);
+	}
+
+	cout << "Loaded service " << svc << endl;
 }

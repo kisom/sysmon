@@ -25,8 +25,59 @@
 #define __SYSMON_SERVICE_HH__
 
 
+#include <sys/types.h> // needed for pid_t
+
+#include <ostream>
+
+#include <job.hh>
+
 namespace smsvc {
 
+	class Service : Job {
+	public:
+		// A Service is constructed from a configuration file.
+		Service()
+		{
+			this->istatus = new Status(State::INIT_ERROR, -1);
+		}
+		~Service();
+
+		int	 start(void);
+		int	 stop(void);
+		int	 kill(int);
+		int	 kill(std::string);
+		Status	 status(void);
+
+		bool	 running(void);
+		bool	 good(void);
+
+		// Based on the Common Lisp version; every
+		// job has a name, the command line, and a
+		// (possibly empty) description.
+		std::string			name;
+		std::vector<std::string>	comm;
+		std::string			desc;
+
+		// A service has additional fields: the PID
+		// must be stored in its own file, as well.
+		std::string			pidfile;
+
+		friend std::ostream& operator<<(std::ostream&, const Service&);
+
+		// load_service reads a service configuration from disk
+		// into the Service.
+		friend int	load_service(std::string, Service&);
+
+	private:
+		Status	*istatus;
+		bool	 loaded;
+		pid_t	 pid;
+
+		int	 write_pidfile(pid_t);
+	};
+
+	std::ostream&	operator<<(std::ostream&, const Service&);
+	int		load_service(std::string, Service&);
 } // namespace smsvc
 
 

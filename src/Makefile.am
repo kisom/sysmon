@@ -4,6 +4,7 @@ AM_CPPFLAGS +=	-Wunused-variable -std=c++11 -D_XOPEN_SOURCE -Os -I.
 AM_CPPFLAGS +=	-fno-elide-constructors	 -Weffc++
 LDADD =		-lpthread
 SYSMONCC =	parser.cc parser.hh 				\
+		logging.hh					\
 		posix_signals.hh posix_signals.cc		\
 		job.hh job.cc					\
 		service.hh service.cc

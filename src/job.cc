@@ -34,6 +34,7 @@ namespace smsvc {
 std::string
 state_string(State state)
 {
+	auto console = logger::get_logger("job.cc");
 	assert(State::INVALID_STATE != state);
 
 	switch (state) {
@@ -41,7 +42,7 @@ state_string(State state)
 		return "failed to initialise";
 	case State::READY:
 		return "is ready";
-	case State::RUNNNING:
+	case State::RUNNING:
 		return "is running";
 	case State::STOPPED:
 		return "is stopped";
@@ -50,9 +51,27 @@ state_string(State state)
 	case State::EXITED:
 		return "exited";
 	default:
-		logger::console->error("[state_string] invalid state {}",
+		console->error("[state_string] invalid state {}",
 		    static_cast<std::underlying_type<SignalAction>::type>(state));
 		std::abort();
+	}
+}
+
+
+bool
+Status::good()
+{
+	switch (this->state()) {
+	case State::READY:
+	case State::RUNNING:
+		return true;
+	case State::EXITED:
+		if (0 == this->code()) {
+			return true;
+		}
+		return false;
+	default:
+		return false;
 	}
 }
 

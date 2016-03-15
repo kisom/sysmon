@@ -25,26 +25,17 @@
 #define __SYSMON_LOGGING_HH__
 
 
+#include <memory>
+
 #include <spdlog/spdlog.h>
 
 
 namespace logger {
 
-        static auto console = spdlog::stdout_logger_mt("console");
-
-	// Switch to syslog.
-	/*
-	void
-	log_to_syslog(void) {
-#ifdef __linux__
-		std::string ident = "sysmon";
-		auto syslog_logger = spdlog::syslog_logger("syslog", ident, LOG_PID);
-		console = syslog_logger;
-#else
-		console->warn("syslog disabled (not on Linux)");
-#endif
+	inline std::shared_ptr<spdlog::logger>
+	get_logger(std::string unit) {
+		return spdlog::stdout_logger_mt(unit);
 	}
-	 */
 
 } // namespace logger
 

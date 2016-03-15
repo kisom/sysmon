@@ -150,6 +150,8 @@ signal_check_and_init(void)
 static bool
 action_fatal(SignalAction a)
 {
+	auto console = logger::get_logger("posix_signals.cc");
+
 	switch (a) {
 	case SignalAction::ACTION_TERM:
 	case SignalAction::ACTION_CORE:
@@ -160,7 +162,7 @@ action_fatal(SignalAction a)
 		return false;
 	// The default case includes ACTION_INVALID.
 	default:
-		logger::console->error("[action_fatal] invalid action {}",
+		console->error("[action_fatal] invalid action {}",
 		    static_cast<std::underlying_type<SignalAction>::type>(a));
 		abort();
 	}
@@ -180,10 +182,11 @@ get_signal(int v)
 	Signal	*sig = nullptr;
 
 	signal_check_and_init();
+	auto console = logger::get_logger("posix_signals.cc");
 
 	sig = signals[v];
 	if (nullptr == sig) {
-		logger::console->error("[get_signal(int v)] signal {} "
+		console->error("[get_signal(int v)] signal {} "
 		    "isn't a valid signal.", v);
 		abort();
 	}
@@ -198,12 +201,13 @@ get_signal(std::string name)
 	Signal		*sig = nullptr;
 	std::string	 signame(name);
 
+	auto console = logger::get_logger("posix_signals.cc");
 	signame = signal_name(signame);
 	signal_check_and_init();
 
 	sig = signalstr[name];
 	if (nullptr == sig) {
-		logger::console->error("[get_signal(std::string name)] "
+		console->error("[get_signal(std::string name)] "
 		    "signal {} isn't a valid signal.", name);
 		abort();
 	}

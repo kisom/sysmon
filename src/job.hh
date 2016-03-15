@@ -25,6 +25,8 @@
 #define __SYSMON_JOB_HH__
 
 
+#include <vector>
+
 #include <posix_signals.hh>
 
 
@@ -41,7 +43,7 @@ namespace smsvc {
 		READY,
 
 		// The job is currently running.
-		RUNNNING,
+		RUNNING,
 
 		// The job has been stopped.
 		STOPPED,
@@ -89,16 +91,31 @@ namespace smsvc {
 
 	};
 
+	// A Job is an abstract type that provides a common interface for
+	// jobs. A job can be scheduled (à la cron) or a service (such
+	// as managed by OpenRC or systemd).
 	class Job {
 	public:
-		int	start(void);
-		int	stop(void);
-		int	kill(int);
-		int	kill(std::string);
-		Signal	status(void);
+		virtual int	start(void) = 0;
+		virtual int	stop(void) = 0;
+		virtual int	kill(int) = 0;
+		virtual int	kill(std::string) = 0;
+		virtual Status	status(void) = 0;
 
-		bool	running(void);
-		bool	good(void);
+		virtual bool	running(void) = 0;
+		virtual bool	good(void) = 0;
+
+	private:
+		// Note that private data fields in a purely
+		// virtual class have no effect; they're
+		// provided here for consistency in inherited classes.
+
+		// Based on the Common Lisp version; every
+		// job has a name, the command line, and a
+		// (possibly empty) description.
+		std::string			name;
+		std::vector<std::string>	comm;
+		std::string			desc;
 	};
 
 } // namespace smsvc
