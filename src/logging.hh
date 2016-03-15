@@ -27,17 +27,20 @@
 
 #include <spdlog/spdlog.h>
 
+
 namespace logger {
 
         static auto console = spdlog::stdout_logger_mt("console");
 
 	// Switch to syslog.
 	void
-	use_syslog(void) {
+	log_to_syslog(void) {
 #ifdef __linux__
 		std::string ident = "sysmon";
 		auto syslog_logger = spdlog::syslog_logger("syslog", ident, LOG_PID);
 		console = syslog_logger;
+#else
+		console->warn("syslog disabled (not on Linux)");
 #endif
 	}
 

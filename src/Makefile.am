@@ -2,6 +2,7 @@ AM_CPPFLAGS  =	-Wall -Wextra -pedantic -Wshadow -Wpointer-arith -Wcast-align
 AM_CPPFLAGS +=	-Wwrite-strings -Wmissing-declarations -Wno-long-long -Werror
 AM_CPPFLAGS +=	-Wunused-variable -std=c++11 -D_XOPEN_SOURCE -Os -I.
 AM_CPPFLAGS +=	-fno-elide-constructors	 -Weffc++
+LDADD =		-lpthread
 SYSMONCC =	parser.cc parser.hh 				\
 		posix_signals.hh posix_signals.cc		\
 		job.hh job.cc					\
