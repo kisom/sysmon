@@ -22,3 +22,9 @@ clang-scanner:
 cppcheck-scanner:
 	cppcheck --quiet --enable=all -I ./ $(SYSMONCC)
 
+.PHONY: coverity-scan
+coverity-scan: clean
+	cov-build --dir cov-int make all check
+	tar czf $(PACKAGE_NAME)-$(PACKAGE_VERSION)_coverity.tar.gz cov-int
+	rm -rf cov-int
+
