@@ -6,5 +6,5 @@ echo "Building with CXX=$CXX"
 sleep 1
 [ -d m4 ] || mkdir m4
 autoreconf -i && ./configure --enable-silent-rules CXX=$CXX     \
-        && make && make test
+        && make && make check
 
