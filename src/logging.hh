@@ -33,7 +33,7 @@ namespace logger {
         static auto console = spdlog::stdout_logger_mt("console");
 
 	// Switch to syslog.
-	void
+	static void
 	log_to_syslog(void) {
 #ifdef __linux__
 		std::string ident = "sysmon";

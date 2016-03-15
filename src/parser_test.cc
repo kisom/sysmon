@@ -30,6 +30,7 @@
 
 #include <getopt.h>
 
+#include <logging.hh>
 #include <parser.hh>
 
 using namespace std;
@@ -119,10 +120,12 @@ standard_tests(void)
 	int	failed = 0;
 
 	if (-1 == test_docker_svc()) {
+		logger::console->error("docker service file test failed");
 		failed++;
 	}
 
 	if (-1 == test_fetchmail_job()) {
+		logger::console->error("fetchmail job file test failed");
 		failed++;
 	}
 
@@ -170,6 +173,7 @@ main(int argc, char *argv[])
 	};
 
 	if (!dump) {
+		logger::log_to_syslog();
 		standard_tests();
 	}
 
