@@ -51,7 +51,7 @@ state_string(State state)
 		return "exited";
 	default:
 		logger::console->error("[state_string] invalid state {}",
-		    state);
+		    static_cast<std::underlying_type<SignalAction>::type>(state));
 		std::abort();
 	}
 }
