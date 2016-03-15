@@ -53,11 +53,25 @@ namespace smsvc {
 	};
 
 
+	// signal_init initialises the signal library manually. This builds
+	// the signal maps (a mapping of signal number to signal objects
+	// and a mapping of signal names to signal objects).
 	void		 signal_init(void);
+
+	// Returns true if the signal is a fatal signal. If signal_init hasn't
+	// been called, it will call it.
 	bool		 signal_fatal(Signal *);
 	bool		 signal_fatal(int);
+
+	// Returns the signal object corresponding to the signal
+	// number or name. If signal_init hasn't been called, it
+	// will call it.
 	Signal		*get_signal(int);
 	Signal		*get_signal(std::string);
+
+	// signal_name attempts to build a signal name from its input. The
+	// string will upcased, and if it's not prefixed with "SIG", it will
+	// add the prefix.
 	std::string	 signal_name(std::string);
 
 } // namespace smsvc

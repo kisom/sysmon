@@ -32,6 +32,8 @@ namespace smsvc {
 
 	// State describes the current state of the program.
 	enum class State {
+		INVALID_STATE,
+
 		// An error occurred during initialisation.
 		INIT_ERROR,
 
@@ -51,6 +53,12 @@ namespace smsvc {
 		EXITED,
 	};
 
+
+	// state_string returns a string name for the State. The returned
+	// string is suitable for use as "the job ..."
+	std::string	state_string(State);
+
+
 	// InitError describes an initialisation error.
 	enum class InitError {
 		INVALID_JOB,	// The job was invalid --- either a job file
@@ -64,12 +72,16 @@ namespace smsvc {
 				// cause for an abort().
 	};
 
+	// A Status contains the program's running status.
 	class Status {
 	public:
 		Status(State s, int c) : istate(s), icode(c) {};
 
-		State	state(void);
-		int	code(void);
+		State	state(void) { return this.istate; }
+		int	code(void)  { return this.code; }
+
+		// Return true if the state indicates a healthy job.
+		bool	good(void);
 
 	private:
 		State	istate;
@@ -82,7 +94,11 @@ namespace smsvc {
 		int	start(void);
 		int	stop(void);
 		int	kill(int);
+		int	kill(std::string);
 		Signal	status(void);
+
+		bool	running(void);
+		bool	good(void);
 	};
 
 } // namespace smsvc

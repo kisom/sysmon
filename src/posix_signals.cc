@@ -21,13 +21,15 @@
  */
 
 
+#include <cassert>
 #include <algorithm>
 #include <iostream>
 #include <map>
 #include <regex>
 #include <stdlib.h>
 
-#include "posix_signals.hh"
+#include <logging.hh>
+#include <posix_signals.hh>
 
 
 namespace smsvc {
@@ -133,6 +135,18 @@ signal_init()
 }
 
 
+static void
+signal_check_and_init(void)
+{
+	if (signals.empty()) {
+		signal_init();
+	}
+
+	assert(!(signals.empty()));
+	assert(!(signalstr.empty()));
+}
+
+
 static bool
 action_fatal(SignalAction a)
 {
@@ -146,9 +160,8 @@ action_fatal(SignalAction a)
 		return false;
 	// The default case includes ACTION_INVALID.
 	default:
-		std::cerr << "[action_fatal] invalid action "
-		          << static_cast<std::underlying_type<SignalAction>::type>(a)
-			  << "\n";
+		logger::console->error("[action_fatal] invalid action {}",
+		    static_cast<std::underlying_type<SignalAction>::type>(a));
 		abort();
 	}
 }
@@ -166,14 +179,12 @@ get_signal(int v)
 {
 	Signal	*sig = nullptr;
 
-	if (signals.empty()) {
-		signal_init();
-	}
+	signal_check_and_init();
 
 	sig = signals[v];
 	if (nullptr == sig) {
-		std::cerr << "[get_signal(int v)] signal " << v
-			  << " isn't a valid signal.\n";
+		logger::console->error("[get_signal(int v)] signal {} "
+		    "isn't a valid signal.", v);
 		abort();
 	}
 
@@ -184,16 +195,16 @@ get_signal(int v)
 Signal *
 get_signal(std::string name)
 {
-	Signal	*sig = nullptr;
+	Signal		*sig = nullptr;
+	std::string	 signame(name);
 
-	if (signalstr.empty()) {
-		signal_init();
-	}
+	signame = signal_name(signame);
+	signal_check_and_init();
 
 	sig = signalstr[name];
 	if (nullptr == sig) {
-		std::cerr << "[get_signal(std::string name)] signal " << name
-			  << " isn't a valid signal.\n";
+		logger::console->error("[get_signal(std::string name)] "
+		    "signal {} isn't a valid signal.", name);
 		abort();
 	}
 

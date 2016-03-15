@@ -3,7 +3,8 @@ AM_CPPFLAGS +=	-Wwrite-strings -Wmissing-declarations -Wno-long-long -Werror
 AM_CPPFLAGS +=	-Wunused-variable -std=c++11 -D_XOPEN_SOURCE -Os -I.
 AM_CPPFLAGS +=	-fno-elide-constructors	 -Weffc++
 SYSMONCC =	parser.cc parser.hh 				\
-		posix_signals.hh posix_signals.cc job.hh	\
+		posix_signals.hh posix_signals.cc		\
+		job.hh job.cc					\
 		service.hh service.cc
 
 
