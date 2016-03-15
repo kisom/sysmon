@@ -1,0 +1,16 @@
+# docker service file
+
+# by default, name is program to run. use program= to override.
+name = docker
+
+# could be description but that's seven more letters.
+desc = the future of computerising
+
+# default is /var/run/$name.pid; explicitly provided here.
+pidfile = /var/run/docker.pid
+
+# default is /var/log/sysmon/name.{log,err}
+logfile = /var/log/docker.log
+errfile = /var/log/docker.err
+
+env:PATH = /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin

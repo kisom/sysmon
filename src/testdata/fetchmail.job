@@ -1,0 +1,11 @@
+# fetchmail scheduled job
+name = fetchmail
+desc = fetch mail
+
+# later, look at variable substitution. MVP doesn't need this.
+program = /home/kyle/bin/fetchmail.sh
+
+# again, rather than parsing time, just provide the frequency in
+# seconds.
+frequency = 300
+
