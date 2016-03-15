@@ -119,13 +119,17 @@ standard_tests(void)
 {
 	int	failed = 0;
 
+	auto console = logger::get_logger("service.cc");
+
+	console->info("testing docker service file");
 	if (-1 == test_docker_svc()) {
-		logger::console->error("docker service file test failed");
+		console->error("docker service file test failed");
 		failed++;
 	}
 
+	console->info("testing fetchmail job file");
 	if (-1 == test_fetchmail_job()) {
-		logger::console->error("fetchmail job file test failed");
+		console->error("fetchmail job file test failed");
 		failed++;
 	}
 
