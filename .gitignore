@@ -29,3 +29,7 @@ src/*.gch
 
 # clang analyser
 src/*.plist
+
+# coverity scanner
+src/cov-int
+src/sysmon.tgz
