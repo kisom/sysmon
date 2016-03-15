@@ -77,8 +77,8 @@ namespace smsvc {
 	public:
 		Status(State s, int c) : istate(s), icode(c) {};
 
-		State	state(void) { return this.istate; }
-		int	code(void)  { return this.code; }
+		State	state(void) { return this->istate; }
+		int	code(void)  { return this->icode; }
 
 		// Return true if the state indicates a healthy job.
 		bool	good(void);

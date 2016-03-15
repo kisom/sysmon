@@ -1,7 +1,11 @@
 #!/bin/sh
 
-CXX=g++
-command -v clang 2>&1 > /dev/null && CXX=clang++
+if [ -z "$CXX" ]
+then
+	CXX=g++
+	command -v clang 2>&1 > /dev/null && CXX=clang++
+fi
+
 echo "Building with CXX=$CXX"
 sleep 1
 [ -d m4 ] || mkdir m4
