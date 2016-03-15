@@ -173,7 +173,6 @@ main(int argc, char *argv[])
 	};
 
 	if (!dump) {
-		logger::log_to_syslog();
 		standard_tests();
 	}
 
