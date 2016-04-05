@@ -23,9 +23,10 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <string>
 
+#include <klogger/console.hh>
 #include <job.hh>
-#include <logging.hh>
 
 
 namespace smsvc {
@@ -34,7 +35,7 @@ namespace smsvc {
 std::string
 state_string(State state)
 {
-	auto console = logger::get_logger("job.cc");
+	klog::ConsoleLogger	console;
 	assert(State::INVALID_STATE != state);
 
 	switch (state) {
@@ -51,8 +52,9 @@ state_string(State state)
 	case State::EXITED:
 		return "exited";
 	default:
-		console->error("[state_string] invalid state {}",
-		    static_cast<std::underlying_type<SignalAction>::type>(state));
+		console.error("job", "state_string invalid state",
+		    {{"state",
+		    std::to_string(static_cast<std::underlying_type<SignalAction>::type>(state))}});
 		std::abort();
 	}
 }

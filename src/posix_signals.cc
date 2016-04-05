@@ -27,8 +27,9 @@
 #include <map>
 #include <regex>
 #include <stdlib.h>
+#include <string>
 
-#include <logging.hh>
+#include <klogger/console.hh>
 #include <posix_signals.hh>
 
 
@@ -150,7 +151,7 @@ signal_check_and_init(void)
 static bool
 action_fatal(SignalAction a)
 {
-	auto console = logger::get_logger("posix_signals.cc");
+	klog::ConsoleLogger	console;
 
 	switch (a) {
 	case SignalAction::ACTION_TERM:
@@ -162,8 +163,9 @@ action_fatal(SignalAction a)
 		return false;
 	// The default case includes ACTION_INVALID.
 	default:
-		console->error("[action_fatal] invalid action {}",
-		    static_cast<std::underlying_type<SignalAction>::type>(a));
+		console.error("posix_signals.cc", "action fatal",
+		    {{"cause", "invalid action"},
+		     {"action", std::to_string(static_cast<std::underlying_type<SignalAction>::type>(a))}});
 		abort();
 	}
 }
@@ -179,15 +181,15 @@ signal_fatal(Signal *sig)
 Signal *
 get_signal(int v)
 {
-	Signal	*sig = nullptr;
+	klog::ConsoleLogger	 console;
+	Signal			*sig = nullptr;
 
 	signal_check_and_init();
-	auto console = logger::get_logger("posix_signals.cc");
 
 	sig = signals[v];
 	if (nullptr == sig) {
-		console->error("[get_signal(int v)] signal {} "
-		    "isn't a valid signal.", v);
+		console.error("posix_signals", "get_signal(int v) invalid signal",
+		    {{"signal", std::to_string(v)}});
 		abort();
 	}
 
@@ -198,17 +200,18 @@ get_signal(int v)
 Signal *
 get_signal(std::string name)
 {
-	Signal		*sig = nullptr;
-	std::string	 signame(name);
+	Signal			*sig = nullptr;
+	std::string		 signame(name);
+	klog::ConsoleLogger	 console;
 
-	auto console = logger::get_logger("posix_signals.cc");
 	signame = signal_name(signame);
 	signal_check_and_init();
 
 	sig = signalstr[name];
 	if (nullptr == sig) {
-		console->error("[get_signal(std::string name)] "
-		    "signal {} isn't a valid signal.", name);
+		console.error("posix_signals",
+		    "get_signal(std::string name) invalid signal",
+		    {{"signal", name}});
 		abort();
 	}
 

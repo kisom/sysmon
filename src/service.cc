@@ -28,9 +28,9 @@
 #include <fstream>
 #include <sstream>
 
+#include <klogger/console.hh>
 #include <parser.hh>
 #include <service.hh>
-#include <logging.hh>
 
 
 namespace smsvc {
@@ -55,11 +55,12 @@ int
 load_service(std::string path, Service &svc)
 {
 	smparser::Parser	p(path);
+	klog::ConsoleLogger	console;
 
-	auto console = logger::get_logger("service.cc");
 	if (svc.loaded) {
-		console->error("[load service] path={}, "
-		    "service already loaded");
+		console.error("service", "load service",
+		    {{"path", path},
+		     {"msg", "service already loaded"}});
 		return -1;
 	}
 
@@ -75,7 +76,7 @@ load_service(std::string path, Service &svc)
 
 	// Without a name or command line, we can't do anything.
 	if (name.empty() && comm.empty()) {
-		console->error("[load_service] path={}, name=\"\", "
+		console.error("[load_service] path={}, name=\"\", "
 		    "program=\"\"", path);
 		return -1;
 	}

@@ -27,15 +27,8 @@
 
 #include <memory>
 
-#include <spdlog/spdlog.h>
-
-
 namespace logger {
 
-	inline std::shared_ptr<spdlog::logger>
-	get_logger(std::string unit) {
-		return spdlog::stdout_logger_mt(unit);
-	}
 
 } // namespace logger
 

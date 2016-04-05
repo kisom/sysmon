@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-#include <logging.hh>
+#include <klogger/console.hh>
 #include <service.hh>
 
 using namespace std;
@@ -43,7 +43,8 @@ usage(bool err, const char *argv0)
 int
 main(int argc, const char *argv[])
 {
-	auto console = logger::get_logger("monitor");
+	klog::ConsoleLogger	console;
+
 	if (2 != argc) {
 		usage(true, argv[0]);
 	}
